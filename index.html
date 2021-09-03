@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	    <meta charset="utf-8" />
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>circle_animation</title>
+		<!-- <link rel="stylesheet" href="./indexStylesheet.css" /> -->
+		<style>
+			:root{
+				--circleWidth: 5em;
+				--gridWidth: 15em;
+			}
+			body{
+				margin: 0;
+				padding: 0;
+			}
+
+			body .body-wrapper{
+				position: relative;
+				min-width: 100vw;
+				min-height: 100vh;
+				display: flex;
+				justify-content: center;
+			}
+
+			.animation-wrapper{
+				position: relative;
+				box-sizing: border-box;
+				margin-top: 5%;
+				height: 50%	;
+				display: flex;
+				flex-flow: column nowrap;
+				justify-content: space-between;
+			}
+
+			.animation-grid{
+				position: relative;
+				width: var(--gridWidth);
+				height: var(--gridWidth);
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+			  grid-template-rows: 1fr 1fr;
+			}
+
+			.grid-items{
+				position: relative;
+				transform-origin: 50% 50%;
+			}
+			.grid-items:nth-child(1){
+				transform: rotate(0deg);
+				z-index: 4;
+
+			}
+			.grid-items:nth-child(2){
+				transform: rotate(90deg);
+				z-index: 3;
+
+			}
+			.grid-items:nth-child(3){
+				grid-column-start: 2;
+				transform: rotate(180deg);
+				z-index: 2;
+
+			}
+			.grid-items:nth-child(4){
+				grid-row-start: 2;
+				grid-column-start: 1;
+				transform: rotate(270deg);
+				z-index: 1;
+
+			}
+			.animate-circle{
+				position: absolute;
+				width: var(--circleWidth);
+				height: var(--circleWidth);
+				animation: right 1s linear 0s infinite alternate;
+				transition-duration: 1s;
+				transform-origin: 0 0;
+				transition-timing-function:  ease-in;
+				border-radius: var(--circleWidth);
+			}
+
+			.grid-items:nth-child(1) .animate-circle{
+				background-color: red;
+			}
+
+			.grid-items:nth-child(2) .animate-circle{
+				background-color: yellow;
+			}
+
+			.grid-items:nth-child(3) .animate-circle{
+				background-color: #00bfff;
+			}
+
+			.grid-items:nth-child(4) .animate-circle{
+				background-color: green;
+			}
+
+			.buttons-wrapper{
+				wudth: 100%;
+				display: flex;
+				flex-flow: row nowrap;
+				justify-content: space-between;
+				margin-top: 20%;
+				padding: 0 5%;
+			}
+			.action-button{
+				min-width: 35%;
+				padding: 2.5%;
+				background-color: rgb(100,100,100);
+				font-size: 1em;
+				color: white;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="body-wrapper">
+			<div class="animation-wrapper">
+				<div class="animation-grid">
+					<div class="grid-items"><div class="animate-circle"></div></div>
+					<div class="grid-items"><div class="animate-circle"></div></div>
+					<div class="grid-items"><div class="animate-circle"></div></div>
+					<div class="grid-items"><div class="animate-circle"></div></div>
+				</div>
+				<div class="buttons-wrapper">
+					<button class="action-button" value="Start" onclick="startAnimation()">Start</button>
+					<button class="action-button" value="Stop" onclick="stopAnimation()">Stop</button>
+				</div>
+			</div>
+		</div>
+	</body>
+
+	<script>
+		var timer = [];
+		var colors=["red","yellow","#00bfff","green"];
+		var currIteration=4;
+		var circleWidth="5em";
+		var gridWidth="15em";
+		function startAnimation(){
+		    let circleSet = document.getElementsByClassName("animate-circle");
+		    for(var i=0;i<4;i++){
+		        if(!timer[i]){
+			        startPulse(circleSet[i],i);
+			        clearInterval(timer[i]);
+			        timer[i] = setInterval(startPulse,2000,circleSet[i],i);
+				}
+		    }
+		}
+
+		function startPulse(item,index){
+			var currColor = (parseInt(currIteration/4) + index)%4;
+			console.log(currIteration,currColor);
+			item.style.width=gridWidth;
+			item.style.backgroundColor=colors[currColor];
+			currIteration++;
+			setTimeout(function (){item.style.width=circleWidth;},1000);
+		}
+
+		function stopAnimation(){
+		    let circleSet = document.getElementsByClassName("animate-circle");
+		    for(var i=0;i<4;i++){
+		        clearInterval(timer[i]);
+		        timer[i]=0;
+		    }
+		}
+	</script>
+</html>
